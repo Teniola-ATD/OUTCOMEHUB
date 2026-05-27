@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { createOpportunity, getAllOpportunities, applyToOpportunity, reviewApplication } = require('../controllers/opportunityController');
+const { createOpportunity, getAllOpportunities, applyToOpportunity, reviewApplication, getNgoDashboardStats} = require('../controllers/opportunityController');
 
 router.post('/', createOpportunity);
 router.get('/', getAllOpportunities);
