@@ -1,4 +1,4 @@
-const HoursLog = require('../models/HoursLog');
+const HoursLog = require('../Models/HoursLog');
 
 // Volunteer logs hours
 const logHours = async (req, res) => {
