@@ -1,5 +1,6 @@
 const Opportunity = require('../Models/Opportunity');
 const Application = require('../Models/Application');
+const HoursLog = require('../Models/HoursLog')
 
 // Post an Opportunity
 const createOpportunity = async (req, res) => {
