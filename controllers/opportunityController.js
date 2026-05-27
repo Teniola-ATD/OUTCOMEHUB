@@ -51,4 +51,51 @@ const reviewApplication = async (req, res) => {
   }
 };
 
-module.exports = { createOpportunity, getAllOpportunities, applyToOpportunity, reviewApplication };
+// NGO Impact Dashboard Summary Metrics
+const getNgoDashboardStats = async (req, res) => {
+  try {
+    const { ngoId } = req.params;
+
+    // 1. Count how many total opportunities this NGO has published
+    const totalPrograms = await Opportunity.countDocuments({ ngo_id: ngoId });
+
+    // 2. Fetch all opportunities belonging to this NGO to trace their hours/applications
+    const ngoOpportunities = await Opportunity.find({ ngo_id: ngoId }).select('_id');
+    const opportunityIds = ngoOpportunities.map(op => op._id);
+
+    // 3. Count total approved volunteer applications for this NGO's events
+    const totalVolunteers = await Application.countDocuments({
+      opportunity_id: { $in: opportunityIds },
+      status: 'approved'
+    });
+
+    // 4. Calculate total verified hours logged across all this NGO's events
+    const hourLogs = await HoursLog.find({
+      opportunity_id: { $in: opportunityIds },
+      status: 'approved'
+    });
+    
+    const totalHoursLogged = hourLogs.reduce((sum, log) => sum + log.hours_logged, 0);
+
+    // Send back a donor-ready stats breakdown dashboard payload
+    res.status(200).json({
+      success: true,
+      metrics: {
+        total_programs: totalPrograms,
+        total_active_volunteers: totalVolunteers,
+        total_verified_hours: totalHoursLogged
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+// add getNgoDashboardStats to module.exports 
+module.exports = { 
+  createOpportunity, 
+  getAllOpportunities, 
+  applyToOpportunity, 
+  reviewApplication, 
+  getNgoDashboardStats 
+};

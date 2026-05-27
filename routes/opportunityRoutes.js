@@ -7,4 +7,7 @@ router.get('/', getAllOpportunities);
 router.post('/apply', applyToOpportunity);
 router.patch('/review/:applicationId', reviewApplication);
 
+// Fetch dashboard metrics for a specific NGO Admin
+router.get('/dashboard/:ngoId', getNgoDashboardStats);
+
 module.exports = router;
