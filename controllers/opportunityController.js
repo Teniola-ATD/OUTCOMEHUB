@@ -78,7 +78,7 @@ const getNgoDashboardStats = async (req, res) => {
     
     const totalHoursLogged = hourLogs.reduce((sum, log) => sum + log.hours_logged, 0);
 
-    // Send back a donor-ready stats breakdown dashboard payload
+    // dashboard payload
     res.status(200).json({
       success: true,
       metrics: {
